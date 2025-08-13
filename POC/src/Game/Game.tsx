@@ -98,7 +98,6 @@ function carvePathToNearestFloor(maze: number[][], sx: number, sy: number) {
     maze[sy][sx] = 0;
     return true;
   }
-  // fallback carve straight corridor outward
   let cx = sx,
     cy = sy;
   for (const d of [
@@ -158,7 +157,6 @@ function placeRooms(
         maze[yy][xx] = border ? 1 : 0;
       }
     }
-    // pick door on border
     const side = Phaser.Math.Between(0, 3);
     let dx = rx,
       dy = ry;
