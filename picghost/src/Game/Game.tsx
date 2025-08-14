@@ -308,11 +308,9 @@ class MainScene extends Phaser.Scene {
         dir = Phaser.Utils.Array.GetRandom(dirs);
         ghost.setData("dir", dir);
 
-        // Snap to center to avoid clipping
         ghost.setPosition(gx * TILE + TILE / 2, gy * TILE + TILE / 2);
       }
 
-      // Move ghosts
       switch (dir) {
         case 0:
           ghost.setVelocity(SPEED, 0);
