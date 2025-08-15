@@ -106,7 +106,7 @@ function gridToPixelY(gy: number) {
   return gy * TILE + TILE / 2;
 }
 const TILE = 48;
-const SPEED = 140;
+const SPEED = 120;
 const MAX_LIVES = 3;
 
 class MainScene extends Phaser.Scene {
