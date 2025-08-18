@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Footer, GameWrapper, Header } from "./Game.style";
-import Phaser, { Scene } from "phaser";
+import Phaser from "phaser";
+
 class MainScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.SpriteWithDynamicBody;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -25,59 +26,56 @@ class MainScene extends Phaser.Scene {
         frameHeight: 48,
       }
     );
-    this.load.spritesheet(
-      "coin",
-      "https://labs.phaser.io/assets/sprites/coin.png",
-      {
-        frameWidth: 32,
-        frameHeight: 32,
-      }
-    );
   }
-  create() {
-    this.add.image(480, 270, "sky").setAlpha(0.6);
-    const platfroms = this.physics.add.staticGroup();
 
-    for (let i = 0; i <= 960; i += 320) {
-      platfroms.create(i, 520, "ground").setOrigin(0, 0.5).refreshBody();
+  create() {
+    // Stretch background to fill parent
+    const { width, height } = this.scale;
+    this.add
+      .image(width / 2, height / 2, "sky")
+      .setDisplaySize(width, height)
+      .setDepth(-1);
+
+    // Platforms
+    const platforms = this.physics.add.staticGroup();
+    for (let i = 0; i <= width; i += 320) {
+      platforms
+        .create(i, height - 20, "ground")
+        .setOrigin(0, 0.5)
+        .refreshBody();
     }
 
-    this.player = this.physics.add.sprite(80, 460, "dude");
+    // Player
+    this.player = this.physics.add.sprite(80, height - 100, "dude");
     this.player.setBounce(0.1).setCollideWorldBounds(true);
+    this.physics.add.collider(this.player, platforms);
 
-    this.physics.collide(this.player, platfroms);
-    //adding animations
-
+    // Animations
     this.anims.create({
       key: "left",
-      frames: this.anims.generateFrameNumbers("dude", {
-        start: 0,
-        end: 3,
-      }),
+      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
       frameRate: 10,
       repeat: -1,
     });
-
     this.anims.create({
-      key: "still",
-      frame: [{ key: "dude", frame: 4 }],
+      key: "turn",
+      frames: [{ key: "dude", frame: 4 }],
       frameRate: 20,
     });
-
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers("dude", {
-        start: 5,
-        end: 8,
-      }),
+      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
       frameRate: 10,
       repeat: -1,
     });
 
-    this.cursors = this.input.keyboard?.createCursorKeys();
+    this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   update() {
+    if (!this.player || !this.cursors) return;
+
+    // Horizontal movement
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-200);
       this.player.anims.play("left", true);
@@ -85,10 +83,14 @@ class MainScene extends Phaser.Scene {
       this.player.setVelocityX(200);
       this.player.anims.play("right", true);
     } else {
-      this.player.setVelocity(0);
-      this.player.anims.play("turn");
+      this.player.setVelocityX(0);
+      if (this.player.anims.exists("turn")) {
+        this.player.anims.play("turn");
+      }
     }
-    if (this.cursors.up.isDown && this.player.body.touching.down) {
+
+    // Jump
+    if (this.cursors.up.isDown && this.player.body.blocked.down) {
       this.player.setVelocityY(-500);
     }
   }
@@ -103,35 +105,38 @@ const Game = () => {
 
   useEffect(() => {
     if (gameRef.current && !phasergameRef.current) {
-      const width = gameRef.current.clientWidth;
-      const height = gameRef.current.clientHeight;
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        width,
-        height,
+        parent: gameRef.current,
+        width: gameRef.current.clientWidth,
+        height: gameRef.current.clientHeight,
+        backgroundColor: "black",
         physics: {
           default: "arcade",
           arcade: { gravity: { y: 1000 }, debug: false },
         },
         scene: new MainScene(setscore),
-        parent: gameRef.current,
-        backgroundColor: "black",
+        scale: {
+          mode: Phaser.Scale.RESIZE,
+          autoCenter: Phaser.Scale.CENTER_BOTH,
+        },
       };
       phasergameRef.current = new Phaser.Game(config);
     }
 
     return () => {
       if (phasergameRef.current) {
-        phasergameRef.current.destroy(1);
+        phasergameRef.current.destroy(true);
         phasergameRef.current = null;
       }
     };
   }, []);
+
   return (
     <>
       <Header>Score: {score}</Header>
       <GameWrapper ref={gameRef} />
-      <Footer>Lives: {lives} </Footer>
+      <Footer>Lives: {lives}</Footer>
     </>
   );
 };
