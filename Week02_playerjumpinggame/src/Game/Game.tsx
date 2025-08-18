@@ -55,7 +55,7 @@ class MainScene extends Phaser.Scene {
         end: 3,
       }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     });
 
     this.anims.create({
