@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Footer, GameWrapper, Header } from "./Game.style";
-import Phaser from "phaser";
+import Phaser, { Scene } from "phaser";
 class MainScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.SpriteWithDynamicBody;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -36,35 +36,11 @@ class MainScene extends Phaser.Scene {
   }
   create() {
     this.add.image(480, 270, "sky").setAlpha(0.6);
-
-    
   }
 }
 
 const Game = () => {
-  const gameref = useRef<HTMLDivElement>(null);
-  const phasergameref = useRef<Phaser.Game | null>(null);
-  const [score, setscore] = useState<number>(0);
-  const [lives, setlives] = useState<number>(3);
-
-  useEffect(() => {
-    if (gameref.current && !phasergameref.current) {
-      const width = gameref.current.clientWidth;
-      const height = gameref.current.clientHeight;
-      phasergameref.current = new Phaser.Game({
-        type: Phaser.AUTO,
-        width,
-        height,
-        parent: gameref.current,
-        backgroundColor: "black",
-        physics: {
-          default: "arcade",
-          arcade: { gravity: { y: 1000 }, debug: false },
-        },
-        scene: new MainScene(setscore),
-      });
-    }
-  }, []);
+  
   return (
     <>
       <Header>Score: </Header>
