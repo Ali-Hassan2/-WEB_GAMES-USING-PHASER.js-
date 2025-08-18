@@ -1,26 +1,20 @@
-// import styled from "styled-components";
+import styled from "styled-components";
+const GameWrapper = styled.div`
+  width: 960px;
+  height: 500px;
+  background-color: red;
+`;
+const Header = styled.div`
+  background-color: black;
+  color: white;
+  padding: 20px;
+  font-family: sans-serif;
+`;
+const Footer = styled.div`
+  background-color: black;
+  color: white;
+  padding: 20px;
+  font-family: sans-serif;
+`;
 
-// export const GameWrapper = styled.div`
-//   width: 960px;
-//   height: 540px;
-//   margin: 0 auto;
-//   background: #000;
-// `;
-
-// export const Header = styled.div`
-//   text-align: center;
-//   font-size: 1.5rem;
-//   color: #fff;
-//   padding: 10px;
-//   background: #1b1b1b;
-// `;
-
-// export const Footer = styled.div`
-//   text-align: center;
-//   font-size: 1.2rem;
-//   color: #fff;
-//   padding: 10px;
-//   background: #1b1b1b;
-// `;
-
-
+export { GameWrapper, Header, Footer };

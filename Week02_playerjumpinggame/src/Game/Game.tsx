@@ -1,11 +1,14 @@
-import React from 'react'
+import { useEffect, useRef } from "react";
+import { Footer, GameWrapper, Header } from "./Game.style";
 
 const Game = () => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <>
+      <Header>Score: </Header>
+      <GameWrapper></GameWrapper>
+      <Footer>Lives: </Footer>
+    </>
+  );
+};
 
-export default Game
+export { Game };
