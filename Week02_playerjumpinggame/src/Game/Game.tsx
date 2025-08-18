@@ -36,6 +36,11 @@ class MainScene extends Phaser.Scene {
   }
   create() {
     this.add.image(480, 270, "sky").setAlpha(0.6);
+    const platfroms = this.physics.add.staticGroup();
+
+    for (let i = 0; i <= 960; i += 320) {
+      platfroms.create(i, 520, "ground").setOrigin(0, 0.5).refreshBody();
+    }
   }
 }
 
@@ -54,7 +59,7 @@ const Game = () => {
         type: Phaser.AUTO,
         width,
         height,
-        physice: {
+        physics: {
           default: "arcade",
           arcade: { gravity: { y: 1000 }, debug: false },
         },
