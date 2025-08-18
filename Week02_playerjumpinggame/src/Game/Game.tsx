@@ -42,8 +42,8 @@ class MainScene extends Phaser.Scene {
       platfroms.create(i, 520, "ground").setOrigin(0, 0.5).refreshBody();
     }
 
-    this.player = this.add.sprite(80, 460, "dude");
-    this.player.setBounce(0.4).setCollideWorldBounds(true);
+    this.player = this.physics.add.sprite(80, 460, "dude");
+    this.player.setBounce(0.1).setCollideWorldBounds(true);
 
     this.physics.collide(this.player, platfroms);
     //adding animations
