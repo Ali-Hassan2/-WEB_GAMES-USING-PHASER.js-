@@ -47,6 +47,44 @@ class MainScene extends Phaser.Scene {
 
     this.physics.collide(this.player, platfroms);
     //adding animations
+
+    this.anims.create({
+      key: "left",
+      frames: this.anims.generateFrameNumbers("dude", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "still",
+      frame: [{ key: "dude", frame: 4 }],
+      frameRate: 20,
+    });
+
+    this.anims.create({
+      key: "right",
+      frames: this.anims.generateFrameNumbers("dude", {
+        start: 5,
+        end: 8,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.cursors = this.input.keyboard?.createCursorKeys();
+  }
+
+  update() {
+    if (this.cursors.left.isDown) {
+      this.player.setVelocityX(-200);
+      this.player.anims.play("left", true);
+    } else if (this.cursors.right.isDown) {
+      this.player.setVelocityX(200);
+      this.player.anims.play("right", true);
+    }
   }
 }
 
