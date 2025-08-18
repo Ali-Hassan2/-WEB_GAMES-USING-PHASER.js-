@@ -1,24 +1,11 @@
-import { useRef, useEffect } from "react";
-import Phaser from "phaser";
+import React from 'react'
 
-
-class Platfrom extendes Phaser.Scene{}
-
-const Game: React.FC = () => {
-
-  const gamref = useRef<HTMLDivElement>(null);
-  const PhaserGameRef = useRef<Phaser.Game | null>(null);
-
-  useEffect(()=>{
-    if(gameref && !PhaserGameRef.current){
-      
-    }
-  },[])
+const Game = () => {
   return (
-    <>
-      <div></div>
-    </>
-  );
-};
+    <div>
+      
+    </div>
+  )
+}
 
-export { Game };
+export default Game
