@@ -52,7 +52,11 @@ class MainScene extends Phaser.Scene {
     }
 
     this.player = this.physics.add.sprite(80, height - 100, "dude");
-    this.player.setBounce(0.1).setCollideWorldBounds(true);
+    this.player
+      .setBounce(0.1)
+      .setCollideWorldBounds(true)
+      .setDragX(600)
+      .setMaxVelocity(300, 600);
     this.physics.add.collider(this.player, platfroms);
 
     this.anims.create({
@@ -84,9 +88,35 @@ class MainScene extends Phaser.Scene {
       repeat: -1,
     });
 
+    this.anims.create({
+      key: "coin-spin",
+      frames: this.anims.generateFrameNumbers("coin", { start: 0, end: 5 }),
+      frameRate: 12,
+      repeat: -1,
+    });
+
+    const coins = this.physics.add.group({
+      allowGravity: false,
+      immovable: true,
+    });
+
+    [
+      { x: 200, y: 220 },
+      { x: 300, y: 300 },
+      { x: 400, y: 200 },
+      { x: 400, y: 300 },
+    ].forEach((pos) => {
+      const coin = coins.create(pos.x, pos.y, "coin");
+      coin.play("coin-spin");
+    });
+
+    this.physics.add.overlap(this.player, coins, (_, coin: any) => {
+      coin.disableBody(true, true);
+      this.setscore((prev) => prev + 1);
+    });
+
     this.cursors = this.input.keyboard?.createCursorKeys();
   }
-
   update() {
     if (!this.player || !this.cursors) return;
 
@@ -97,11 +127,12 @@ class MainScene extends Phaser.Scene {
       this.player.setVelocityX(200);
       this.player.anims.play("right", true);
     } else {
-      this.player.setVelocityX(0);
       this.player.anims.play("turn");
+      this.player.setVelocityX(0);
     }
-
-    if(this.cursors)
+    if (this.cursors.up.isDown && this.player.body.blocked.down) {
+      this.player.setVelocityY(-600);
+    }
   }
 }
 
