@@ -57,7 +57,7 @@ class MainScene extends Phaser.Scene {
 
     this.anims.create({
       key: "left",
-      frame: this.anims.generateFrameNumbers("dude", {
+      frames: this.anims.generateFrameNumbers("dude", {
         start: 0,
         end: 3,
       }),
@@ -76,7 +76,7 @@ class MainScene extends Phaser.Scene {
     });
     this.anims.create({
       key: "right",
-      anims: this.anims.generateFrameNames("dude", {
+      frames: this.anims.generateFrameNames("dude", {
         start: 5,
         end: 8,
       }),
@@ -93,11 +93,15 @@ class MainScene extends Phaser.Scene {
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-200);
       this.player.anims.play("left", true);
+    } else if (this.cursors.right.isDown) {
+      this.player.setVelocityX(200);
+      this.player.anims.play("right", true);
+    } else {
+      this.player.setVelocityX(0);
+      this.player.anims.play("turn");
     }
-    else if(this.cursors.right.isDown){
-      this.player.setVelocity(200);
-      this.player
-    }
+
+    if(this.cursors)
   }
 }
 
