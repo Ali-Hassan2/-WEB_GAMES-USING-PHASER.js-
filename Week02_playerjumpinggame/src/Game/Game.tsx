@@ -40,12 +40,43 @@ class MainScene extends Phaser.Scene {
 }
 
 const Game = () => {
-  
+  const gameRef = useRef<HTMLDivElement>(null);
+  const phasergameRef = useRef<Phaser.Game | null>(null);
+
+  const [score, setscore] = useState(0);
+  const [lives, setlives] = useState(3);
+
+  useEffect(() => {
+    if (gameRef.current && !phasergameRef.current) {
+      const width = gameRef.current.clientWidth;
+      const height = gameRef.current.clientHeight;
+      const config: Phaser.Types.Core.GameConfig = {
+        type: Phaser.AUTO,
+        width,
+        height,
+        physice: {
+          default: "arcade",
+          arcade: { gravity: { y: 1000 }, debug: false },
+        },
+        scene: new MainScene(setscore),
+        parent: gameRef.current,
+        backgroundColor: "black",
+      };
+      phasergameRef.current = new Phaser.Game(config);
+    }
+
+    return () => {
+      if (phasergameRef.current) {
+        phasergameRef.current.destroy(1);
+        phasergameRef.current = null;
+      }
+    };
+  }, []);
   return (
     <>
-      <Header>Score: </Header>
-      <GameWrapper ref={gameref} />
-      <Footer>Lives: </Footer>
+      <Header>Score: {score}</Header>
+      <GameWrapper ref={gameRef} />
+      <Footer>Lives: {lives} </Footer>
     </>
   );
 };
