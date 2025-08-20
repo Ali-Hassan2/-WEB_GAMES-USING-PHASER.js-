@@ -29,7 +29,7 @@ class MainScene extends Phaser.Scene {
       "https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3"
     );
   }
-  
+
   create() {
     this.coinSound = this.sound.add("coinSound");
     this.add.image(400, 300, "background");
@@ -47,7 +47,6 @@ class MainScene extends Phaser.Scene {
         color: "#ffffff",
       })
       .setScrollFactor(0);
-
     this.Cursors = this.input.keyboard?.createCursorKeys();
 
     this.physics.add.overlap(
