@@ -47,6 +47,7 @@ class MainScene extends Phaser.Scene {
         color: "#ffffff",
       })
       .setScrollFactor(0);
+      
     this.Cursors = this.input.keyboard?.createCursorKeys();
 
     this.physics.add.overlap(
